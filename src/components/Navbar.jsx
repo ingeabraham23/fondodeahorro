@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const navigationItems = [
-  { path: '/calendario', icon: faCalendar, label: 'Calendario' },
+  { path: '/', icon: faCalendar, label: 'Calendario' },
   { path: '/registro', icon: faCalendar, label: 'Registro' },
   { path: '/reporte', icon: faTableCells, label: 'Reporte' },
   { path: '/respaldo', icon: faCloudArrowUp, label: 'Respaldo' },

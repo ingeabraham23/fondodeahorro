@@ -17,13 +17,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function TablaReporte() {
   const [reportes, setReportes] = useState([]);
   const [filtroNombre, setFiltroNombre] = useState("");
-  const [password, setPassword] = useState("");
-  const [showTable, setShowTable] = useState(false);
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
 
   const tableRef = useRef(null);
 
@@ -41,30 +34,30 @@ function TablaReporte() {
     fetchReportes();
   }, []);
 
-
   const handleFiltroNombre = (e) => {
     setFiltroNombre(e.target.value);
   };
 
-
   // Función para filtrar los datos por número de unidad y ruta
   const filtrarDatos = (reportes) => {
-    return reportes.filter((reporte) => {
-      const nombreLowerCase = reporte.nombre.toLowerCase(); // Convertir el nombre a minúsculas
-      const filtroLowerCase = filtroNombre.toLowerCase(); // Convertir el filtro a minúsculas
-      return filtroLowerCase === "" || nombreLowerCase.includes(filtroLowerCase);
-    }).map((reporte) => ({
-      ...reporte,
-      fecha: new Date(reporte.fecha).toLocaleDateString("es-ES", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }),
-    }));
+    return reportes
+      .filter((reporte) => {
+        const nombreLowerCase = reporte.nombre.toLowerCase(); // Convertir el nombre a minúsculas
+        const filtroLowerCase = filtroNombre.toLowerCase(); // Convertir el filtro a minúsculas
+        return (
+          filtroLowerCase === "" || nombreLowerCase.includes(filtroLowerCase)
+        );
+      })
+      .map((reporte) => ({
+        ...reporte,
+        fecha: new Date(reporte.fecha).toLocaleDateString("es-ES", {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }),
+      }));
   };
-  
-  
 
   const reportesFiltrados = filtrarDatos(reportes);
 
@@ -228,31 +221,10 @@ function TablaReporte() {
     window.scrollTo(0, document.body.scrollHeight);
   };
 
-  const totalCooperacion = reportesFiltrados.reduce((total, reporte) => total + reporte.cooperacion, 0);
-
-  const handleShowTable = () => {
-    // Aquí puedes validar la contraseña, por ejemplo, comparándola con una contraseña predefinida.
-    // Si la contraseña es válida, muestra la tabla.
-    if (password === "purosreyes") {
-      setShowTable(true);
-    } else {
-      alert("Contraseña incorrecta. Inténtalo de nuevo.");
-    }
-  };
-
-  if (!showTable) {
-    return (
-      <div>
-        <h3>Ingrese la contraseña para ver los datos:</h3>
-        <input
-          type="password"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        <button onClick={handleShowTable}>Mostrar Datos</button>
-      </div>
-    );
-  }
+  const totalCooperacion = reportesFiltrados.reduce(
+    (total, reporte) => total + reporte.cooperacion,
+    0
+  );
 
   return (
     <div>
@@ -273,7 +245,6 @@ function TablaReporte() {
             <th>Nombre</th>
             <th>Cooperacion</th>
             <th>Fecha</th>
-
           </tr>
         </thead>
         <tbody>

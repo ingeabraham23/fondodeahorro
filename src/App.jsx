@@ -13,7 +13,7 @@ function App() {
         <div>
           <Navbar />
           <Routes>
-            <Route path="/calendario" element={<Calendario />} />
+            <Route path="/" element={<Calendario />} />
             <Route path="/registro" element={<Registro />} />
             <Route path="/reporte" element={<TablaReporte />} />
             <Route path="/respaldo" element={<RespaldoYRestauracion />} />

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import db from "../db";
+import "./Registro.css"
 
 const nombresDisponibles = ["Abraham", "David", "Eloy", "Enrique", "Heriberto", "Lobo", "Marco"];
 
@@ -43,11 +44,12 @@ function AgregarPersona() {
   };
 
   return (
-    <div>
+    <div className="add-person-container">
       <h3>Agregar Persona</h3>
-      <div>
-        <label htmlFor="nombreInput">Nombre:</label>
+      <div className="form-group">
+        <label className="label" htmlFor="nombreInput">Nombre:</label>
         <select
+        className="select"
           id="nombreInput"
           value={nuevaPersona.nombre}
           onChange={(e) => handleInputChange(e, "nombre")}
@@ -61,8 +63,8 @@ function AgregarPersona() {
         </select>
       </div>
       <div>
-        <label htmlFor="cooperacionInput">Cooperación:</label>
-        <input
+        <label className="label" htmlFor="cooperacionInput">Cooperación:</label>
+        <input className="input"
           id="cooperacionInput"
           type="number"
           value={nuevaPersona.cooperacion}
@@ -70,7 +72,7 @@ function AgregarPersona() {
         />
       </div>
       <div>
-        <label>Fecha:</label>
+        <label className="label">Fecha:</label>
         <DatePicker
           selected={nuevaPersona.fecha}
           onChange={handleFechaChange}
@@ -79,7 +81,7 @@ function AgregarPersona() {
         />
       </div>
       <p>Fecha formateada: {formatDate(new Date(nuevaPersona.fecha))}</p>
-      <button onClick={handleAgregarPersona}>Agregar Persona</button>
+      <button className="add-button" onClick={handleAgregarPersona}>Agregar Persona</button>
     </div>
   );
 }
