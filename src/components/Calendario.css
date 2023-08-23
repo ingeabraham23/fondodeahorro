@@ -1,0 +1,77 @@
+/* Estilos para el contenedor principal de la aplicación */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px;
+    max-width: 500px;
+    width: 93%;
+    margin: 5px;
+    margin-top: 5px;
+  }
+  
+  
+  /* Estilos para el contenedor de las tablas */
+  .table-container {
+      margin-top: 5px;
+      display: flex;
+      justify-content: center; /* Centra el contenido horizontalmente */
+      align-items: center; /* Centra el contenido verticalmente */
+  }
+  
+  /* Estilos para las tablas */
+  .custom-table {
+    border-collapse: separate;
+    font-family: Arial, sans-serif;
+    border: 1px solid #000000;
+    width: 100%;
+    max-width: 450px; /* Ancho máximo de la tabla */
+  }
+  
+  .custom-table2 {
+    border-collapse: separate;
+    font-family: Arial, sans-serif;
+    border: 1px solid #000000;
+    width: 100%;
+    max-width: 450px; /* Ancho máximo de la tabla */
+  }
+  
+  /* Estilos para las celdas de encabezado */
+  .custom-table th {
+    background-color: #8ce02c;
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  .custom-table2 th {
+    background-color: #0a40a5;
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Estilos para las celdas de datos */
+  .custom-table td {
+    background-color: #ff733b;
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  /* Estilos para las celdas de datos */
+  .custom-table2 td {
+    background-color: #d120fd;
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Estilos para la fila resaltada */
+  .custom-table tr:hover {
+    background-color: #f2f2f2;
+  }
+  

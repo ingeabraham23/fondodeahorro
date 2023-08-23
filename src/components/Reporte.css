@@ -1,0 +1,129 @@
+/* Reporte.css */
+
+/* Estilos para la tabla */
+.tabla-reporte {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #000;
+  }
+  
+  /* Estilos para las celdas de encabezado (th) */
+  .tabla-reporte th {
+    border: 1px solid #000;
+    background-color: #f0f0f0;
+    padding: 3px;
+    text-align: center;
+    font-size: 8px; /* Tamaño de fuente personalizado para los encabezados */
+  }
+  
+  /* Estilos para las celdas de datos (td) */
+  .tabla-reporte td {
+    border: 1px solid #000;
+    text-align: center;
+    font-size: 12px;
+  }
+  
+  /* Estilos para el margen entre la tabla y otros elementos */
+  .tabla-container {
+    margin-top: 20px;
+  }
+  
+  /* Estilos para hacer la tabla responsive */
+  @media screen and (max-width: 600px) {
+    .tabla-reporte {
+      font-size: 12px; /* Reduce el tamaño del texto */
+    }
+    
+  /* Ajustar el ancho de los inputs en pantallas más grandes */
+  @media screen and (min-width: 768px) {
+    .filtro-container input {
+      width: 33%; /* Dividir el espacio en tres partes iguales para que los inputs ocupen una tercera parte del contenedor */
+    }
+  }
+  
+    .tabla-reporte th,
+    .tabla-reporte td {
+      padding: 2px; /* Reduce el relleno de las celdas */
+    }
+  
+    .tabla-container {
+      overflow-x: auto; /* Agrega una barra de desplazamiento horizontal en pantallas pequeñas */
+    }
+  }
+  
+  .filtros {
+    /* Estilos de los campos de búsqueda */
+    display: flex;
+    gap: 10px; /* Espacio entre los inputs */
+  }
+  
+  .filtros input {
+    flex: 1; /* Los inputs se expandirán para ocupar todo el espacio disponible */
+    min-width: 0; /* Asegurarse de que los inputs puedan reducir su tamaño */
+    width: 0; /* Establecer el ancho inicial en 0 */
+    background-color: #f9f9f9; /* Color de fondo personalizado */
+    color: #333333; /* Color del texto personalizado */
+    font-size: 14px; /* Tamaño de fuente personalizado */
+    border: 1px solid #ddd; /* Borde personalizado */
+    border-radius: 6px; /* Radio de borde personalizado */
+    padding: 5px; /* Espaciado interno personalizado */
+    margin: 5px; /* Margen externo personalizado */
+  }
+  
+  
+  .botones-flotantes {
+    position: fixed;
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Estilos para el botón PDF */
+  .boton-pdf {
+    background-color: #FF5733;
+    color: #FFFFFF;
+    font-size: 20px; /* Aumenta el tamaño de letra */
+    /* Agrega otros estilos específicos para este botón */
+  }
+  
+  /* Estilos para el botón de Imagen */
+  .boton-imagen {
+    background-color: #00CC66;
+    color: #FFFFFF;
+    font-size: 20px; /* Aumenta el tamaño de letra */
+    /* Agrega otros estilos específicos para este botón */
+  }
+  
+  /* Estilos para el botón de Ir al final */
+  .boton-ir-abajo {
+    background-color: #FFC300;
+    color: #FFFFFF;
+    font-size: 20px; /* Aumenta el tamaño de letra */
+    /* Agrega otros estilos específicos para este botón */
+  }
+  
+  .botones-flotantes button {
+    margin-right: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 20%;
+    cursor: pointer;
+    transition: background-color 0.5s;
+  }
+  
+  .botones-flotantes button:last-child {
+    margin-right: 0;
+  }
+  
+  .total-label {
+    background-color: #FF5733;
+    font-weight: bold;
+  }
+
+  .total-value{
+    background-color: #00CC66;
+    font-weight: bold;
+  }
+  
