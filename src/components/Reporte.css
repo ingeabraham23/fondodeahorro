@@ -85,6 +85,11 @@
     background-color: #FF5733;
     color: #FFFFFF;
     font-size: 20px; /* Aumenta el tamaño de letra */
+    padding: 10px;
+    border: 1px solid black;
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 20%;
     /* Agrega otros estilos específicos para este botón */
   }
   
@@ -93,6 +98,11 @@
     background-color: #00CC66;
     color: #FFFFFF;
     font-size: 20px; /* Aumenta el tamaño de letra */
+    padding: 10px;
+    border: 1px solid black;
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 20%;
     /* Agrega otros estilos específicos para este botón */
   }
   
@@ -100,6 +110,12 @@
   .boton-ir-abajo {
     background-color: #FFC300;
     color: #FFFFFF;
+    padding: 10px;
+    border: 1px solid black;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 20%;
     font-size: 20px; /* Aumenta el tamaño de letra */
     /* Agrega otros estilos específicos para este botón */
   }
@@ -127,3 +143,25 @@
     font-weight: bold;
   }
   
+  /* Estilos para hacer la tabla responsive */
+@media screen and (max-width: 600px) {
+  .tabla-reporte {
+    font-size: 12px; /* Reduce el tamaño del texto */
+  }
+
+  /* Ajustar el ancho de los inputs en pantallas más grandes */
+  @media screen and (min-width: 768px) {
+    .filtro-container input {
+      width: 33%; /* Dividir el espacio en tres partes iguales para que los inputs ocupen una tercera parte del contenedor */
+    }
+  }
+
+  .tabla-reporte th,
+  .tabla-reporte td {
+    padding: 2px; /* Reduce el relleno de las celdas */
+  }
+
+  .tabla-container {
+    overflow-x: auto; /* Agrega una barra de desplazamiento horizontal en pantallas pequeñas */
+  }
+}

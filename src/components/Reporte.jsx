@@ -238,6 +238,11 @@ function TablaReporte() {
           inputMode="text" /* Teclado numérico */
         />
       </div>
+      <div>
+        <button className="boton-ir-abajo" onClick={handleGoToBottom}>
+          <FontAwesomeIcon icon={faCircleArrowDown} />
+        </button>
+      </div>
       <table ref={tableRef} className="tabla-reporte">
         <thead>
           <tr>
@@ -266,15 +271,12 @@ function TablaReporte() {
           </tr>
         </tfoot>
       </table>
-      <div className="botones-flotantes">
+      <div>
         <button className="boton-pdf" onClick={handleDownloadPDF}>
           <FontAwesomeIcon icon={faFilePdf} />
         </button>
         <button className="boton-imagen" onClick={handleDownloadImage}>
           <FontAwesomeIcon icon={faCamera} />
-        </button>
-        <button className="boton-ir-abajo" onClick={handleGoToBottom}>
-          <FontAwesomeIcon icon={faCircleArrowDown} />
         </button>
       </div>
     </div>
