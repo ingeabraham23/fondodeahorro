@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 import {
-    faCalendar, faCloudArrowUp, faPlusCircle, faTableCells,
+    faCalendar, faCloudArrowUp, faMoneyBillTrendUp, faMoneyCheckDollar, faPlusCircle, faTableCells,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -11,6 +11,8 @@ const navigationItems = [
   { path: '/registro', icon: faPlusCircle, label: 'Registro' },
   { path: '/reporte', icon: faTableCells, label: 'Reporte' },
   { path: '/respaldo', icon: faCloudArrowUp, label: 'Respaldo' },
+  { path: '/calculos', icon: faMoneyBillTrendUp, label: 'Calculos' },
+  { path: '/pagos', icon: faMoneyCheckDollar, label: 'Pagos' },
 ];
 
 function Navbar() {

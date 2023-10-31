@@ -6,6 +6,8 @@ import Calendario from "./components/Calendario";
 import Registro from "./components/Registro";
 import TablaReporte from "./components/Reporte";
 import RespaldoYRestauracion from "./components/RespaldoYRestauracion";
+import CalculadoraDePrestamo from "./components/Calculos";
+import CalculadoraDePagos from "./components/CalculadoraDePagos";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
             <Route path="/registro" element={<Registro />} />
             <Route path="/reporte" element={<TablaReporte />} />
             <Route path="/respaldo" element={<RespaldoYRestauracion />} />
+            <Route path="/calculos" element={<CalculadoraDePrestamo />} />
+            <Route path="/pagos" element={<CalculadoraDePagos />} />
           </Routes>
         </div>
     </HashRouter>

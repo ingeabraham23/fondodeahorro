@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import db from "../db";
-import jsonData from "./backup.json";
+import jsonData from "./backupFondoDeAhorro.json";
 import "./RespaldoYRestauracion.css"
 
 function RespaldoYRestauracion() {
@@ -23,7 +23,7 @@ function RespaldoYRestauracion() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "backup.json";
+      a.download = "backupFondoDeAhorro.json";
       a.click();
 
       console.log("Base de datos respaldada correctamente");
