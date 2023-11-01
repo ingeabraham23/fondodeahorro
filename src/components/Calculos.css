@@ -23,38 +23,38 @@
 
   .tabla-vista {
     width: 100%;
-    border: 1px solid #000;
+    border: 1px solid #37b800;
     border-collapse: separate;
     background-color: rgb(255, 255, 255);
   }
 
   .tabla-vista td {
-    border: 1px solid #165c0b;
+    border: 1px solid #37b800;
   }
 
-  .titulo {
-    background-color: #165c0b;
+  .titulo-calculos {
+    background-color: #246d07;
     color: rgb(255, 255, 255);
     font-size: 20px;
 
   }
   .aporte {
-    background-color: #b0ff90;
+    background-color: #4ae600;
 
   }
   .aporte-cantidad {
-    background-color: #d6ffc4;
+    background-color: #59ff00;
 
   }
 
   .prestamo{
-    background-color: #1eb800;
+    background-color: #37b800;
   }
   .total{
     background-color: #178b00;
   }
   .porcentaje{
-    background-color: #edffe4;
+    background-color: #93ff50;
   }
 
   input {

@@ -6,10 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 // eslint-disable-next-line no-unused-vars
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import "./CalculadoraDePagos.css"
-import {
-    faCamera,
-} from "@fortawesome/free-solid-svg-icons";
+import "./CalculadoraDePagos.css";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function CalculadoraDePagos() {
@@ -57,9 +55,8 @@ function CalculadoraDePagos() {
     const calendarioPagos = fechaPagos.map((fecha, index) => ({
       fecha,
       montoPorPago: montoPorPago,
-      montoPorPagar:
-        (montoTotal - index * montoPorPago) - montoPorPago,
-        estado: index < pagosRealizados ? '✅pagado' : '🔴pendiente',
+      montoPorPagar: montoTotal - index * montoPorPago - montoPorPago,
+      estado: index < pagosRealizados ? "✅pagado" : "🔴pendiente",
     }));
 
     // Aquí puedes hacer algo con el calendario de pagos (por ejemplo, mostrarlo en el componente)
@@ -77,7 +74,7 @@ function CalculadoraDePagos() {
       const pngUrl = canvas.toDataURL("image/png");
       const downloadLink = document.createElement("a");
       downloadLink.href = pngUrl;
-      downloadLink.download = 'pagos.png';
+      downloadLink.download = "pagos.png";
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
@@ -98,6 +95,9 @@ function CalculadoraDePagos() {
       <div>
         <label>Fecha del Préstamo:</label>
         <DatePicker
+          placeholderText="Click para seleccionar la fecha del Prestamo"
+          showIcon
+          withPortal
           selected={fechaPrestamo}
           onChange={(date) => setFechaPrestamo(date)}
           onFocus={(e) => {
@@ -111,6 +111,9 @@ function CalculadoraDePagos() {
       <div>
         <label>Fecha del Primer Pago:</label>
         <DatePicker
+          placeholderText="Click para seleccionar la fecha del Primer Pago"
+          showIcon
+          withPortal
           selected={fechaPrimerPago}
           onChange={(date) => setFechaPrimerPago(date)}
           onFocus={(e) => {
@@ -157,7 +160,11 @@ function CalculadoraDePagos() {
       </div>
       <div>
         <label>Pagos Realizados:</label>
-        <input type="number" value={pagosRealizados} onChange={(e) => setPagosRealizados(e.target.value)} />
+        <input
+          type="number"
+          value={pagosRealizados}
+          onChange={(e) => setPagosRealizados(e.target.value)}
+        />
       </div>
       <hr></hr>
       <button onClick={calcularPagos}>Calcular Pagos</button>
@@ -165,25 +172,41 @@ function CalculadoraDePagos() {
       <table className="tabla-pagos" ref={tablaPagosRef}>
         <thead>
           <tr>
-            <td className="titulo" colSpan={2} >Cliente:</td>
-            <td className="titulo-valor" colSpan={3}>{nombre}</td>
-          </tr>
-          <tr>
-            <td className="titulo" colSpan={2} >Prestamo:</td>
-            <td className="titulo-valor" colSpan={3}>$ {formatNumberWithCommas(cantidadPrestamo)}.00</td>
-          </tr>
-          <tr>
-            <td className="titulo" colSpan={2} >Interés:</td>
-            <td className="titulo-valor" colSpan={3}>{interes * 100}%</td>
-          </tr>
-          <tr>
-            <td className="titulo" colSpan={2} >Total a pagar:</td>
+            <td className="titulo" colSpan={2}>
+              Cliente:
+            </td>
             <td className="titulo-valor" colSpan={3}>
-              $ {formatNumberWithCommas(cantidadPrestamo * (1 + interes))}.00
+              {nombre}
             </td>
           </tr>
           <tr>
-            <td className="titulo" colSpan={2}>Fecha del prestamo:</td>
+            <td className="titulo" colSpan={2}>
+              Prestamo:
+            </td>
+            <td className="titulo-valor" colSpan={3}>
+              $ {formatNumberWithCommas(cantidadPrestamo)}.00
+            </td>
+          </tr>
+          <tr>
+            <td className="titulo" colSpan={2}>
+              Interés:
+            </td>
+            <td className="titulo-valor" colSpan={3}>
+              {interes * 100}%
+            </td>
+          </tr>
+          <tr>
+            <td className="titulo" colSpan={2}>
+              Total a pagar:
+            </td>
+            <td className="titulo-valor" colSpan={3} style={{textAlign:"center"}}>
+              $ {formatNumberWithCommas(cantidadPrestamo * (1 + interes))}.00 <hr></hr>En {cantidadPagos} Pagos de $ {formatNumberWithCommas((cantidadPrestamo * (1 + interes)) / cantidadPagos)}.00
+            </td>
+          </tr>
+          <tr>
+            <td className="titulo" colSpan={2}>
+              Fecha del prestamo:
+            </td>
             <td colSpan={3} className="titulo-valor">
               {fechaPrestamo
                 ? format(fechaPrestamo, "EEEE d 'de' MMMM 'de' y", {
@@ -205,14 +228,20 @@ function CalculadoraDePagos() {
               <td colSpan={2} className="fechapago">
                 {format(pago.fecha, "EEEE d 'de' MMMM 'de' y", { locale: es })}
               </td>
-              <td className="montopago">${formatNumberWithCommas(pago.montoPorPago)}</td>
-              <td className="resta">${formatNumberWithCommas(pago.montoPorPagar)}</td>
+              <td className="montopago">
+                ${formatNumberWithCommas(pago.montoPorPago)}
+              </td>
+              <td className="resta">
+                ${formatNumberWithCommas(pago.montoPorPagar)}
+              </td>
               <td className="resta">{pago.estado}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={capturarTabla} >Capturar <FontAwesomeIcon icon={faCamera} ></FontAwesomeIcon></button>
+      <button onClick={capturarTabla}>
+        Capturar <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
+      </button>
     </div>
   );
 }

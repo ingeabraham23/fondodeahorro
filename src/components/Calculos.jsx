@@ -133,7 +133,7 @@ function CalculadoraDePrestamo() {
         <table className="tabla-vista" ref={tablaRef}>
           <tbody>
             <tr>
-              <td colSpan={3} style={{ textAlign: 'center' }} className="titulo">
+              <td colSpan={3} style={{ textAlign: 'center' }} className="titulo-calculos">
                 Prestamo:
               </td>
             </tr>
@@ -148,7 +148,7 @@ function CalculadoraDePrestamo() {
               <td className="prestamo" colSpan={2}>{interes * 100}%</td>
             </tr>
             <tr>
-              <td colSpan={3} style={{ textAlign: 'center' }} className="titulo">
+              <td colSpan={3} style={{ textAlign: 'center' }} className="titulo-calculos">
                 Aportes:
               </td>
             </tr>
@@ -171,7 +171,7 @@ function CalculadoraDePrestamo() {
               <td className='total'>100.00%</td>
             </tr>
             <tr>
-              <td colSpan={3} style={{ textAlign: 'center' }} className="titulo">
+              <td colSpan={3} style={{ textAlign: 'center' }} className="titulo-calculos">
                 Distribucion de ganancias:
               </td>
             </tr>

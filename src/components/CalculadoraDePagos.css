@@ -3,31 +3,33 @@
 }
 
 .titulo{
-    background-color: #c25106;
+    background-color: #cc3e02;
     font-size: 15px;
     padding: 5px;
+    color: #ffffff;
 }
 
 .titulo-valor{
-    background-color: #cc4c02;
+    background-color: #ff5900;
     padding: 5px;
+    font-size: 15px;
 }
 
 .cabecera{
-    background-color: #9b9b9b;
+    background-color: #ff730a;
 }
 
 .fechapago{
-    background-color: #ff6a00;
-    font-size: 11px;
+    background-color: #ff9232;
+    font-size: 12px;
 }
 
 .montopago{
-    background-color: #ff830a;
+    background-color: #ffbb6d;
 }
 
 .resta{
-    background-color: #ffa032;
+    background-color: #ff9232;
 }
 
 button {
