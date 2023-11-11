@@ -23,6 +23,15 @@ function CalculadoraDePagos() {
   const [pagosRealizados, setPagosRealizados] = useState(0);
 
   const tablaPagosRef = useRef(null);
+  // Obtén la fecha actual
+  const fechaActual = new Date();
+
+  // Define el formato deseado (por ejemplo, "eeee d 'de' MMMM 'de' yyyy")
+  const formatoFecha = "eeee d 'de' MMMM 'de' yyyy";
+
+  // Utiliza la función format para obtener la fecha formateada
+  const fechaFormateada = format(fechaActual, formatoFecha, { locale: es });
+
   // Función para calcular los pagos y generar el calendario de pagos
   const calcularPagos = () => {
     if (cantidadPrestamo <= 0 || interes <= 0 || cantidadPagos <= 0) {
@@ -226,7 +235,7 @@ function CalculadoraDePagos() {
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
               <td colSpan={2} className="fechapago">
-                {format(pago.fecha, "EEEE d 'de' MMMM 'de' y", { locale: es })}
+                {format(pago.fecha, "EE d 'de' MMM 'de' y", { locale: es })}
               </td>
               <td className="montopago">
                 ${formatNumberWithCommas(pago.montoPorPago)}
@@ -237,13 +246,15 @@ function CalculadoraDePagos() {
               <td className="resta">{pago.estado}</td>
             </tr>
           ))}
-          {calendarioPagos.map((pago, index) => (
+          
+        </tbody>
+        <tfoot>{calendarioPagos.map((pago, index) => (
             <tr key={index}>
-              {index == (pagosRealizados-1) && <td className="debe-hoy" colSpan={5}>Usted debe Hoy: $ {formatNumberWithCommas(pago.montoPorPagar)}.00
+              {index == (pagosRealizados-1) && <td className="debe-hoy" colSpan={5}>Usted debe hoy {fechaFormateada} : $ {formatNumberWithCommas(pago.montoPorPagar)}.00
               </td>}
             </tr>
           ))}
-        </tbody>
+        </tfoot>
       </table>
       <button onClick={capturarTabla}>
         Capturar <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
