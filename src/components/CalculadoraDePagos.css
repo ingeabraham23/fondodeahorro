@@ -21,7 +21,7 @@
 
 .fechapago{
     background-color: #ff9232;
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .montopago{
@@ -30,6 +30,10 @@
 
 .resta{
     background-color: #ff9232;
+}
+.debe-hoy{
+    background-color: rgb(67, 255, 50);
+    font-size: 25px;
 }
 
 button {

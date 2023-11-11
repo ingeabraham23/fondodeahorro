@@ -237,6 +237,12 @@ function CalculadoraDePagos() {
               <td className="resta">{pago.estado}</td>
             </tr>
           ))}
+          {calendarioPagos.map((pago, index) => (
+            <tr key={index}>
+              {index == (pagosRealizados-1) && <td className="debe-hoy" colSpan={5}>Usted debe Hoy: $ {formatNumberWithCommas(pago.montoPorPagar)}.00
+              </td>}
+            </tr>
+          ))}
         </tbody>
       </table>
       <button onClick={capturarTabla}>
