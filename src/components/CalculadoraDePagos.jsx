@@ -238,23 +238,26 @@ function CalculadoraDePagos() {
                 {format(pago.fecha, "EE d 'de' MMM 'de' y", { locale: es })}
               </td>
               <td className="montopago">
-                ${formatNumberWithCommas(pago.montoPorPago)}
+                $ {formatNumberWithCommas(pago.montoPorPago)}.00
               </td>
               <td className="resta">
-                ${formatNumberWithCommas(pago.montoPorPagar)}
+                $ {formatNumberWithCommas(pago.montoPorPagar)}.00
               </td>
               <td className="resta">{pago.estado}</td>
             </tr>
           ))}
-          
-        </tbody>
-        <tfoot>{calendarioPagos.map((pago, index) => (
+          <tr>
+            <td colSpan={5} className="fecha-actual" >
+              {fechaFormateada}
+            </td>
+          </tr>
+          {calendarioPagos.map((pago, index) => (
             <tr key={index}>
-              {index == (pagosRealizados-1) && <td className="debe-hoy" colSpan={5}>Usted debe hoy {fechaFormateada} : $ {formatNumberWithCommas(pago.montoPorPagar)}.00
+              {index == (pagosRealizados-1) && <td className="debe-hoy" colSpan={5}>Usted debe hoy: $ {formatNumberWithCommas(pago.montoPorPagar)}.00
               </td>}
             </tr>
           ))}
-        </tfoot>
+        </tbody>
       </table>
       <button onClick={capturarTabla}>
         Capturar <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
