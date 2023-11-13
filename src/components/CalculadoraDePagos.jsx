@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import html2canvas from "html2canvas";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -9,10 +9,11 @@ import { es } from "date-fns/locale";
 import "./CalculadoraDePagos.css";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import db from "../dbClientes"
 
 function CalculadoraDePagos() {
-  const [nombre, setNombre] = useState();
 
+  const [nombre, setNombre] = useState("");
   const [fechaPrestamo, setFechaPrestamo] = useState(null);
   const [fechaPrimerPago, setFechaPrimerPago] = useState(null);
   const [frecuenciaPago, setFrecuenciaPago] = useState("semanal");
@@ -21,6 +22,9 @@ function CalculadoraDePagos() {
   const [cantidadPagos, setCantidadPagos] = useState(1); // Número de pagos
   const [calendarioPagos, setCalendarioPagos] = useState([]);
   const [pagosRealizados, setPagosRealizados] = useState(0);
+
+  const [registros, setRegistros] = useState([]);
+  const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
 
   const tablaPagosRef = useRef(null);
   // Obtén la fecha actual
@@ -31,6 +35,118 @@ function CalculadoraDePagos() {
 
   // Utiliza la función format para obtener la fecha formateada
   const fechaFormateada = format(fechaActual, formatoFecha, { locale: es });
+
+  useEffect(() => {
+    const cargarDatosGuardados = async () => {
+      try {
+        const todosLosPagos = await db.pagos.toArray();
+        setRegistros(todosLosPagos);
+      } catch (error) {
+        console.error("Error al cargar datos desde Dexie:", error);
+      }
+    };
+
+    cargarDatosGuardados();
+  }, []);
+
+
+  const existeClienteConPrestamo = () => {
+    return registros.some((registro) => registro.nombre === nombre);
+  };
+
+  const guardarDatos = async () => {
+    if (existeClienteConPrestamo()) {
+      alert("Este cliente actualmente tiene un préstamo pendiente y no puede recibir otro préstamo.");
+      return;
+    }
+
+    try {
+      await db.pagos.add({
+        nombre,
+        fechaPrestamo,
+        fechaPrimerPago,
+        frecuenciaPago,
+        cantidadPrestamo,
+        interes,
+        cantidadPagos,
+        calendarioPagos,
+        pagosRealizados,
+      });
+      console.log("Datos guardados en Dexie");
+      limpiarFormulario(); // Limpiar el formulario después de guardar
+    } catch (error) {
+      console.error("Error al guardar datos en Dexie:", error);
+    }
+  };
+
+  const actualizarDatos = async () => {
+    try {
+      await db.pagos.update(registroSeleccionado, {
+        nombre,
+        fechaPrestamo,
+        fechaPrimerPago,
+        frecuenciaPago,
+        cantidadPrestamo,
+        interes,
+        cantidadPagos,
+        calendarioPagos,
+        pagosRealizados,
+      });
+      console.log("Datos actualizados en Dexie");
+    } catch (error) {
+      console.error("Error al actualizar datos en Dexie:", error);
+    }
+  };
+
+  const eliminarDatos = async () => {
+    if (window.confirm("¿Seguro que quieres eliminar este registro?")) {
+      try {
+        await db.pagos.delete(registroSeleccionado);
+        console.log("Registro eliminado de Dexie");
+        limpiarFormulario(); // Limpiar el formulario después de eliminar
+      } catch (error) {
+        console.error("Error al eliminar datos en Dexie:", error);
+      }
+    }
+  };
+
+  const limpiarFormulario = () => {
+    setNombre("");
+    setFechaPrestamo(null);
+    setFechaPrimerPago(null);
+    setFrecuenciaPago("semanal");
+    setCantidadPrestamo(0);
+    setInteres(0.2);
+    setCantidadPagos(1);
+    setCalendarioPagos([]);
+    setPagosRealizados(0);
+    setRegistroSeleccionado(null);
+  };
+
+  const handleGuardarClick = () => {
+    guardarDatos();
+  };
+
+  const handleActualizarClick = () => {
+    actualizarDatos();
+  };
+
+  const cargarRegistroSeleccionado = (id) => {
+    const registro = registros.find((r) => r.id === id);
+    if (registro) {
+      setNombre(registro.nombre);
+      setFechaPrestamo(registro.fechaPrestamo);
+      setFechaPrimerPago(registro.fechaPrimerPago);
+      setFrecuenciaPago(registro.frecuenciaPago);
+      setCantidadPrestamo(registro.cantidadPrestamo);
+      setInteres(registro.interes);
+      setCantidadPagos(registro.cantidadPagos);
+      setCalendarioPagos(registro.calendarioPagos);
+      setPagosRealizados(registro.pagosRealizados);
+      setRegistroSeleccionado(registro.id);
+    }
+  };
+
 
   // Función para calcular los pagos y generar el calendario de pagos
   const calcularPagos = () => {
@@ -93,6 +209,22 @@ function CalculadoraDePagos() {
   return (
     <div>
       <hr></hr>
+      <div>
+        <label>Seleccionar Registro:</label>
+        <select
+          value={registroSeleccionado || ""}
+          onChange={(e) => cargarRegistroSeleccionado(Number(e.target.value))}
+        >
+          <option value="" disabled>
+            -- Seleccionar Registro --
+          </option>
+          {registros.map((registro) => (
+            <option key={registro.id} value={registro.id}>
+              {registro.nombre}
+            </option>
+          ))}
+        </select>
+      </div>
       <div>
         <label>Cliente:</label>
         <input
@@ -176,7 +308,12 @@ function CalculadoraDePagos() {
         />
       </div>
       <hr></hr>
-      <button onClick={calcularPagos}>Calcular Pagos</button>
+      
+      
+      <div className="contenedor-boton">
+      <button onClick={calcularPagos} className="boton-calcular" >Calcular Pagos</button>
+      </div>
+      
 
       <table className="tabla-pagos" ref={tablaPagosRef}>
         <thead>
@@ -253,15 +390,30 @@ function CalculadoraDePagos() {
           </tr>
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
+              {index == (pagosRealizados-1) && <td className="ha-pagado" colSpan={5}>Usted ha pagado: $ {formatNumberWithCommas((cantidadPrestamo * (1 + interes)) - (pago.montoPorPagar))}.00
+              </td>}
+            </tr>
+          ))}
+          {calendarioPagos.map((pago, index) => (
+            <tr key={index}>
               {index == (pagosRealizados-1) && <td className="debe-hoy" colSpan={5}>Usted debe hoy: $ {formatNumberWithCommas(pago.montoPorPagar)}.00
               </td>}
             </tr>
           ))}
+          
         </tbody>
       </table>
-      <button onClick={capturarTabla}>
+      <div className="contenedor-boton">
+      <button onClick={handleGuardarClick} className="boton-guardar" >Guardar</button>
+      <button onClick={handleActualizarClick} className="boton-actualizar" >Actualizar</button>
+      <button onClick={eliminarDatos} className="boton-eliminar" >Eliminar</button>
+      </div>
+      <div className="contenedor-boton" >
+      <button onClick={capturarTabla} className="boton-capturar">
         Capturar <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
       </button>
+      </div>
+      
     </div>
   );
 }

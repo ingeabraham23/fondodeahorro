@@ -17,7 +17,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "date-fns": "^2.30.0",
     "dexie": "^3.2.4",
-    "dexie-react-hooks": "^1.1.6",
+    "dexie-react-hooks": "^1.1.7",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.31",

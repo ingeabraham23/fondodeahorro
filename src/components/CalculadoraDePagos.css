@@ -1,95 +1,162 @@
-.tabla-pagos{
-    border: 1px solid #000;
-    border-collapse: collapse;
-    width: 100%;
+.tabla-pagos {
+  border: 1px solid #000;
+  border-collapse: collapse;
+  width: 100%;
 }
 
-.titulo{
-    background-color: #cc3e02;
-    font-size: 12px;
-    padding: 2px;
-    color: #ffffff;
-    border: 1px solid #000;
+.titulo {
+  background-color: #cc3e02;
+  font-size: 12px;
+  padding: 2px;
+  color: #ffffff;
+  border: 1px solid #000;
 }
 
-.titulo-valor{
-    background-color: #ff5900;
-    padding: 2px;
-    font-size: 12px;
-    text-align: center;
-    border: 1px solid #000;
+.titulo-valor {
+  background-color: #ff5900;
+  padding: 2px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #000;
 }
 
-.cabecera{
-    background-color: #ff730a;
-    border: 1px solid #000;
+.cabecera {
+  background-color: #ff730a;
+  border: 1px solid #000;
 }
 
-.fechapago{
-    padding: 2px;
-    background-color: #ff9232;
-    font-size: 12px;
-    border: 1px solid #000;
+.fechapago {
+  padding: 2px;
+  background-color: #ff9232;
+  font-size: 12px;
+  border: 1px solid #000;
 }
 
-.montopago{
-    background-color: #ffbb6d;
-    padding: 2px;
-    font-size: 12px;
-    text-align: center;
-    border: 1px solid #000;
+.montopago {
+  background-color: #ffbb6d;
+  padding: 2px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #000;
 }
 
-.resta{
-    background-color: #ff9232;
-    padding: 2px;
-    font-size: 12px;
-    text-align: center;
-    border: 1px solid #000;
+.resta {
+  background-color: #ff9232;
+  padding: 2px;
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #000;
 }
-.debe-hoy{
-    background-color: rgb(67, 255, 50);
-    font-size: 25px;
-    text-align: center;
-    border: 1px solid #000;
-    padding: 2px;
+.debe-hoy {
+  background-color: rgb(67, 255, 50);
+  font-size: 25px;
+  text-align: center;
+  border: 1px solid #000;
+  padding: 2px;
+}
+.ha-pagado {
+  background-color: rgb(67, 255, 50);
+  font-size: 20px;
+  text-align: center;
+  border: 1px solid #000;
+  padding: 2px;
 }
 
-.fecha-actual{
-    padding: 2px;
-    background-color: rgb(67, 255, 50);
-    font-size: 15px;
-    text-align: center;
+.fecha-actual {
+  padding: 2px;
+  background-color: rgb(67, 255, 50);
+  font-size: 15px;
+  text-align: center;
 }
 
-button {
-    background-color: #ff6803; /* Cambia el color de fondo */
-    color: white; /* Cambia el color del texto */
-    padding: 10px 20px; /* Aumenta el espacio alrededor del texto */
-    border: 1px solid #000; /* Elimina el borde */
-    border-radius: 5px; /* Agrega bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar por encima */
-    transition: background-color 0.3s ease; /* Agrega una transición */
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 20px;
-  }
+.boton-guardar {
+  background-color: rgb(69, 224, 30); /* Cambia el color de fondo */
+  color: white; /* Cambia el color del texto */
+  padding: 10px; /* Aumenta el espacio alrededor del texto */
+  border: 1px solid #000; /* Elimina el borde */
+  border-radius: 5px; /* Agrega bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease; /* Agrega una transición */
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-size: 20px;
+}
 
-  input {
-    width: 100%; /* Ajusta el ancho al contenedor padre */
-    padding: 5px 10px; /* Aumenta el espacio alrededor del texto */
-    margin: 3px 0; /* Agrega un margen alrededor del campo de entrada */
-    box-sizing: border-box; /* Ajusta el tamaño del campo de entrada para incluir el borde y el relleno */
-    border: 2px solid #ccc; /* Agrega un borde */
-    border-radius: 4px; /* Agrega bordes redondeados */
-  }
-  
-  input[type="text"]:focus {
-    border-color: #4caf50; /* Cambia el color del borde al enfocar el campo de entrada */
-    outline: none; /* Elimina el contorno predeterminado */
-  }
+.boton-actualizar {
+  background-color: rgb(39, 140, 255); /* Cambia el color de fondo */
+  color: white; /* Cambia el color del texto */
+  padding: 10px; /* Aumenta el espacio alrededor del texto */
+  border: 1px solid #000; /* Elimina el borde */
+  border-radius: 5px; /* Agrega bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease; /* Agrega una transición */
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-size: 20px;
+}
 
-  select{
-    width: 100%;
-    padding: 5px 10px;
-  }
+.boton-eliminar {
+  background-color: #ff0303; /* Cambia el color de fondo */
+  color: white; /* Cambia el color del texto */
+  padding: 10px; /* Aumenta el espacio alrededor del texto */
+  border: 1px solid #000; /* Elimina el borde */
+  border-radius: 5px; /* Agrega bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease; /* Agrega una transición */
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+.boton-calcular {
+  background-color: #ff6803; /* Cambia el color de fondo */
+  color: white; /* Cambia el color del texto */
+  padding: 10px 20px; /* Aumenta el espacio alrededor del texto */
+  border: 1px solid #000; /* Elimina el borde */
+  border-radius: 5px; /* Agrega bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease; /* Agrega una transición */
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+.boton-capturar {
+  background-color: #ff6803; /* Cambia el color de fondo */
+  color: white; /* Cambia el color del texto */
+  padding: 10px 20px; /* Aumenta el espacio alrededor del texto */
+  border: 1px solid #000; /* Elimina el borde */
+  border-radius: 5px; /* Agrega bordes redondeados */
+  cursor: pointer; /* Cambia el cursor al pasar por encima */
+  transition: background-color 0.3s ease; /* Agrega una transición */
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+.contenedor-boton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+input {
+  width: 100%; /* Ajusta el ancho al contenedor padre */
+  padding: 5px 10px; /* Aumenta el espacio alrededor del texto */
+  margin: 3px 0; /* Agrega un margen alrededor del campo de entrada */
+  box-sizing: border-box; /* Ajusta el tamaño del campo de entrada para incluir el borde y el relleno */
+  border: 2px solid #ccc; /* Agrega un borde */
+  border-radius: 4px; /* Agrega bordes redondeados */
+}
+
+input[type="text"]:focus {
+  border-color: #4caf50; /* Cambia el color del borde al enfocar el campo de entrada */
+  outline: none; /* Elimina el contorno predeterminado */
+}
+
+select {
+  width: 100%;
+  padding: 5px 10px;
+}
