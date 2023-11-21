@@ -9,10 +9,11 @@ import { es } from "date-fns/locale";
 import "./CalculadoraDePagos.css";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import db from "../dbClientes"
+import db from "../dbClientes";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function CalculadoraDePagos() {
-
   const [nombre, setNombre] = useState("");
   const [fechaPrestamo, setFechaPrestamo] = useState(null);
   const [fechaPrimerPago, setFechaPrimerPago] = useState(null);
@@ -25,6 +26,7 @@ function CalculadoraDePagos() {
 
   const [registros, setRegistros] = useState([]);
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
+  const [incluyeDomingos, setIncluyeDomingos] = useState(true);
 
   const tablaPagosRef = useRef(null);
   // Obtén la fecha actual
@@ -36,19 +38,19 @@ function CalculadoraDePagos() {
   // Utiliza la función format para obtener la fecha formateada
   const fechaFormateada = format(fechaActual, formatoFecha, { locale: es });
 
-  useEffect(() => {
-    const cargarDatosGuardados = async () => {
-      try {
-        const todosLosPagos = await db.pagos.toArray();
-        setRegistros(todosLosPagos);
-      } catch (error) {
-        console.error("Error al cargar datos desde Dexie:", error);
-      }
-    };
+  const cargarDatosGuardados = async () => {
+    try {
+      const todosLosPagos = await db.pagos.toArray();
+      setRegistros(todosLosPagos);
+    } catch (error) {
+      toast.error("Error al cargar datos");
+      console.error("Error al cargar datos desde Dexie:", error);
+    }
+  };
 
+  useEffect(() => {
     cargarDatosGuardados();
   }, []);
-
 
   const existeClienteConPrestamo = () => {
     return registros.some((registro) => registro.nombre === nombre);
@@ -56,7 +58,9 @@ function CalculadoraDePagos() {
 
   const guardarDatos = async () => {
     if (existeClienteConPrestamo()) {
-      alert("Este cliente actualmente tiene un préstamo pendiente y no puede recibir otro préstamo.");
+      alert(
+        "Este cliente actualmente tiene un préstamo pendiente y no puede recibir otro préstamo."
+      );
       return;
     }
 
@@ -72,9 +76,12 @@ function CalculadoraDePagos() {
         calendarioPagos,
         pagosRealizados,
       });
+      toast.success("Datos guardados correctamente.");
       console.log("Datos guardados en Dexie");
       limpiarFormulario(); // Limpiar el formulario después de guardar
+      cargarDatosGuardados();
     } catch (error) {
+      toast.error("Error al guardar datos.");
       console.error("Error al guardar datos en Dexie:", error);
     }
   };
@@ -92,9 +99,13 @@ function CalculadoraDePagos() {
         calendarioPagos,
         pagosRealizados,
       });
+      toast.success("Datos Actualizados correctamente.");
       console.log("Datos actualizados en Dexie");
+      limpiarFormulario();
+      cargarDatosGuardados();
     } catch (error) {
       console.error("Error al actualizar datos en Dexie:", error);
+      toast.error("Error al actualizar los datos.");
     }
   };
 
@@ -102,9 +113,12 @@ function CalculadoraDePagos() {
     if (window.confirm("¿Seguro que quieres eliminar este registro?")) {
       try {
         await db.pagos.delete(registroSeleccionado);
+        toast.warn("El registro se ha Eliminado.");
         console.log("Registro eliminado de Dexie");
         limpiarFormulario(); // Limpiar el formulario después de eliminar
+        cargarDatosGuardados();
       } catch (error) {
+        toast.error("Error al Eliminar el registro.");
         console.error("Error al eliminar datos en Dexie:", error);
       }
     }
@@ -147,47 +161,42 @@ function CalculadoraDePagos() {
     }
   };
 
-
   // Función para calcular los pagos y generar el calendario de pagos
   const calcularPagos = () => {
     if (cantidadPrestamo <= 0 || interes <= 0 || cantidadPagos <= 0) {
-      alert("Por favor, ingresa valores válidos.");
+      toast.warn("Por favor, ingresa valores válidos.");
       return;
     }
-
-    // Calcula el monto total a pagar, incluyendo el interés
+  
     const montoTotal = cantidadPrestamo * (1 + interes);
-
-    // Calcula la fecha de cada pago en base a la frecuencia y la fecha del primer pago
     const fechaPagos = [];
-    const fechaActual = new Date(fechaPrimerPago);
-    if (frecuenciaPago === "diario") {
-      for (let i = 0; i < cantidadPagos; i++) {
-        fechaPagos.push(new Date(fechaActual));
+    let fechaActual = new Date(fechaPrimerPago);
+  
+    for (let i = 0; i < cantidadPagos; i++) {
+      // Si la opción de incluir domingos está desactivada, omite los domingos
+      if (!incluyeDomingos && fechaActual.getDay() === 0 /* Domingo */) {
         fechaActual.setDate(fechaActual.getDate() + 1);
       }
-    } else if (frecuenciaPago === "semanal") {
-      for (let i = 0; i < cantidadPagos; i++) {
-        fechaPagos.push(new Date(fechaActual));
-        fechaActual.setDate(fechaActual.getDate() + 7);
-      }
+  
+      fechaPagos.push(new Date(fechaActual));
+      fechaActual.setDate(fechaActual.getDate() + 1);
     }
-
-    // Calcula el monto a pagar en cada fecha
+  
     const montoPorPago = montoTotal / cantidadPagos;
-
-    // Genera el calendario de pagos
     const calendarioPagos = fechaPagos.map((fecha, index) => ({
       fecha,
-      montoPorPago: montoPorPago,
+      montoPorPago,
       montoPorPagar: montoTotal - index * montoPorPago - montoPorPago,
       estado: index < pagosRealizados ? "✅pagado" : "🔴pendiente",
     }));
-
-    // Aquí puedes hacer algo con el calendario de pagos (por ejemplo, mostrarlo en el componente)
+  
     setCalendarioPagos(calendarioPagos);
     console.log(calendarioPagos);
   };
+  
+  
+  
+  
 
   const formatNumberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -203,6 +212,7 @@ function CalculadoraDePagos() {
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
+      toast.success("La tabla se ha capturado correctamente.");
     });
   }
 
@@ -276,6 +286,17 @@ function CalculadoraDePagos() {
         </select>
       </div>
       <div>
+        <label>
+          Incluir pagos los domingos:
+          <input
+            type="checkbox"
+            checked={incluyeDomingos}
+            onChange={() => setIncluyeDomingos(!incluyeDomingos)}
+          />
+        </label>
+      </div>
+
+      <div>
         <label>Cantidad del Préstamo:</label>
         <input
           type="number"
@@ -308,12 +329,12 @@ function CalculadoraDePagos() {
         />
       </div>
       <hr></hr>
-      
-      
+
       <div className="contenedor-boton">
-      <button onClick={calcularPagos} className="boton-calcular" >Calcular Pagos</button>
+        <button onClick={calcularPagos} className="boton-calcular">
+          Calcular Pagos
+        </button>
       </div>
-      
 
       <table className="tabla-pagos" ref={tablaPagosRef}>
         <thead>
@@ -345,8 +366,17 @@ function CalculadoraDePagos() {
             <td className="titulo" colSpan={2}>
               Total a pagar:
             </td>
-            <td className="titulo-valor" colSpan={3} style={{textAlign:"center"}}>
-              $ {formatNumberWithCommas(cantidadPrestamo * (1 + interes))}.00 <hr></hr>En {cantidadPagos} Pagos de $ {formatNumberWithCommas((cantidadPrestamo * (1 + interes)) / cantidadPagos)}.00
+            <td
+              className="titulo-valor"
+              colSpan={3}
+              style={{ textAlign: "center" }}
+            >
+              $ {formatNumberWithCommas(cantidadPrestamo * (1 + interes))}.00{" "}
+              <hr></hr>En {cantidadPagos} Pagos de ${" "}
+              {formatNumberWithCommas(
+                (cantidadPrestamo * (1 + interes)) / cantidadPagos
+              )}
+              .00
             </td>
           </tr>
           <tr>
@@ -375,45 +405,69 @@ function CalculadoraDePagos() {
                 {format(pago.fecha, "EE d 'de' MMM 'de' y", { locale: es })}
               </td>
               <td className="montopago">
-                $ {formatNumberWithCommas(pago.montoPorPago)}.00
+                {pago.omitido
+                  ? "-"
+                  : `$ ${formatNumberWithCommas(pago.montoPorPago)}.00`}
               </td>
               <td className="resta">
-                $ {formatNumberWithCommas(pago.montoPorPagar)}.00
+                {pago.omitido
+                  ? "-"
+                  : `$ ${formatNumberWithCommas(pago.montoPorPagar)}.00`}
               </td>
               <td className="resta">{pago.estado}</td>
             </tr>
           ))}
+
           <tr>
-            <td colSpan={5} className="fecha-actual" >
+            <td colSpan={5} className="fecha-actual">
               {fechaFormateada}
             </td>
           </tr>
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
-              {index == (pagosRealizados-1) && <td className="ha-pagado" colSpan={5}>Usted ha pagado: $ {formatNumberWithCommas((cantidadPrestamo * (1 + interes)) - (pago.montoPorPagar))}.00
-              </td>}
+              {index == pagosRealizados - 1 && (
+                <td className="ha-pagado" colSpan={5}>
+                  Usted ha pagado: ${" "}
+                  {formatNumberWithCommas(
+                    cantidadPrestamo * (1 + interes) - pago.montoPorPagar
+                  )}
+                  .00{" ("}
+                  {pagosRealizados}
+                  {" Pagos)"}
+                </td>
+              )}
             </tr>
           ))}
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
-              {index == (pagosRealizados-1) && <td className="debe-hoy" colSpan={5}>Usted debe hoy: $ {formatNumberWithCommas(pago.montoPorPagar)}.00
-              </td>}
+              {index == pagosRealizados - 1 && (
+                <td className="debe-hoy" colSpan={5}>
+                  Usted debe hoy: $ {formatNumberWithCommas(pago.montoPorPagar)}
+                  .00{" ("}
+                  {cantidadPagos - pagosRealizados}
+                  {" Pagos)"}
+                </td>
+              )}
             </tr>
           ))}
-          
         </tbody>
       </table>
       <div className="contenedor-boton">
-      <button onClick={handleGuardarClick} className="boton-guardar" >Guardar</button>
-      <button onClick={handleActualizarClick} className="boton-actualizar" >Actualizar</button>
-      <button onClick={eliminarDatos} className="boton-eliminar" >Eliminar</button>
+        <button onClick={handleGuardarClick} className="boton-guardar">
+          Guardar
+        </button>
+        <button onClick={handleActualizarClick} className="boton-actualizar">
+          Actualizar
+        </button>
+        <button onClick={eliminarDatos} className="boton-eliminar">
+          Eliminar
+        </button>
       </div>
-      <div className="contenedor-boton" >
-      <button onClick={capturarTabla} className="boton-capturar">
-        Capturar <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
-      </button>
+      <div className="contenedor-boton">
+        <button onClick={capturarTabla} className="boton-capturar">
+          Capturar <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
+        </button>
       </div>
-      
     </div>
   );
 }
