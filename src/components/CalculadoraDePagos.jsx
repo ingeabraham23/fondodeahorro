@@ -23,6 +23,7 @@ function CalculadoraDePagos() {
   const [cantidadPagos, setCantidadPagos] = useState(1); // Número de pagos
   const [calendarioPagos, setCalendarioPagos] = useState([]);
   const [pagosRealizados, setPagosRealizados] = useState(0);
+  const [pagosAtrasados, setPagosAtrasados] = useState(0);
 
   const [registros, setRegistros] = useState([]);
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
@@ -98,6 +99,7 @@ function CalculadoraDePagos() {
         cantidadPagos,
         calendarioPagos,
         pagosRealizados,
+        pagosAtrasados,
       });
       toast.success("Datos Actualizados correctamente.");
       console.log("Datos actualizados en Dexie");
@@ -135,6 +137,7 @@ function CalculadoraDePagos() {
     setCalendarioPagos([]);
     setPagosRealizados(0);
     setRegistroSeleccionado(null);
+    setPagosAtrasados(0);
   };
 
   const handleGuardarClick = () => {
@@ -157,6 +160,7 @@ function CalculadoraDePagos() {
       setCantidadPagos(registro.cantidadPagos);
       setCalendarioPagos(registro.calendarioPagos);
       setPagosRealizados(registro.pagosRealizados);
+      setPagosAtrasados(registro.pagosAtrasados);
       setRegistroSeleccionado(registro.id);
     }
   };
@@ -167,36 +171,39 @@ function CalculadoraDePagos() {
       toast.warn("Por favor, ingresa valores válidos.");
       return;
     }
-  
+
     const montoTotal = cantidadPrestamo * (1 + interes);
     const fechaPagos = [];
     let fechaActual = new Date(fechaPrimerPago);
-  
+
     for (let i = 0; i < cantidadPagos; i++) {
       // Si la opción de incluir domingos está desactivada, omite los domingos
       if (!incluyeDomingos && fechaActual.getDay() === 0 /* Domingo */) {
         fechaActual.setDate(fechaActual.getDate() + 1);
       }
-  
+
       fechaPagos.push(new Date(fechaActual));
       fechaActual.setDate(fechaActual.getDate() + 1);
     }
-  
+
     const montoPorPago = montoTotal / cantidadPagos;
+    const totalPagosRealizadosAtrasados =
+      parseInt(pagosRealizados, 10) + parseInt(pagosAtrasados, 10);
+    console.log(totalPagosRealizadosAtrasados);
     const calendarioPagos = fechaPagos.map((fecha, index) => ({
       fecha,
       montoPorPago,
       montoPorPagar: montoTotal - index * montoPorPago - montoPorPago,
-      estado: index < pagosRealizados ? "✅pagado" : "🔴pendiente",
+      estado:
+        index < pagosRealizados
+          ? 0
+          : index < totalPagosRealizadosAtrasados
+          ? 1
+          : 2
     }));
-  
     setCalendarioPagos(calendarioPagos);
     console.log(calendarioPagos);
   };
-  
-  
-  
-  
 
   const formatNumberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -328,6 +335,14 @@ function CalculadoraDePagos() {
           onChange={(e) => setPagosRealizados(e.target.value)}
         />
       </div>
+      <div>
+        <label>Pagos Atrasados:</label>
+        <input
+          type="number"
+          value={pagosAtrasados}
+          onChange={(e) => setPagosAtrasados(e.target.value)}
+        />
+      </div>
       <hr></hr>
 
       <div className="contenedor-boton">
@@ -401,20 +416,24 @@ function CalculadoraDePagos() {
         <tbody>
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
-              <td colSpan={2} className="fechapago">
+              <td colSpan={2} className="fechapago" style={{backgroundColor:pago.estado == 1 ? "red": "#ff9232"}}>
                 {format(pago.fecha, "EE d 'de' MMM 'de' y", { locale: es })}
               </td>
-              <td className="montopago">
+              <td className="montopago" style={{backgroundColor:pago.estado == 1 ? "red": "#ffbb6d"}}>
                 {pago.omitido
                   ? "-"
                   : `$ ${formatNumberWithCommas(pago.montoPorPago)}.00`}
               </td>
-              <td className="resta">
+              <td className="resta" style={{backgroundColor:pago.estado == 1 ? "red": "#ff9232"}}>
                 {pago.omitido
                   ? "-"
                   : `$ ${formatNumberWithCommas(pago.montoPorPagar)}.00`}
               </td>
-              <td className="resta">{pago.estado}</td>
+              <td
+              className="resta" style={{backgroundColor:pago.estado == 1 ? "red": "#ff9232"}}
+              >
+                {pago.estado == 0 ? "👍 Pagado." : pago.estado == 1 ? "❎ Atrasado." : "⏰ Pendiente."}
+              </td>
             </tr>
           ))}
 
@@ -446,6 +465,16 @@ function CalculadoraDePagos() {
                   .00{" ("}
                   {cantidadPagos - pagosRealizados}
                   {" Pagos)"}
+                </td>
+              )}
+            </tr>
+          ))}
+          {calendarioPagos.map((pago, index) => (
+            <tr key={index}>
+              {index == 0 && pagosAtrasados > 0 && (
+                <td className="atrasado" colSpan={5}>
+                  Usted lleva: ({pagosAtrasados} Pagos Atrasados) 
+                  ${pagosAtrasados * pago.montoPorPago}.00
                 </td>
               )}
             </tr>

@@ -3,12 +3,19 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import db from "../db";
-import "./Registro.css"
+import "./Registro.css";
 
-const nombresDisponibles = ["Abraham", "David", "Eloy", "Enrique", "Heriberto", "Lobo", "Marco"];
+const nombresDisponibles = [
+  "Abraham",
+  "David",
+  "Eloy",
+  "Enrique",
+  "Heriberto",
+  "Lobo",
+  "Marco",
+];
 
 function AgregarPersona() {
-
   const [nuevaPersona, setNuevaPersona] = useState({
     nombre: "",
     cooperacion: 100,
@@ -16,7 +23,10 @@ function AgregarPersona() {
   });
 
   const handleInputChange = (event, field) => {
-    const value = field === "cooperacion" ? parseInt(event.target.value, 10) : event.target.value;
+    const value =
+      field === "cooperacion"
+        ? parseInt(event.target.value, 10)
+        : event.target.value;
     setNuevaPersona({ ...nuevaPersona, [field]: value });
   };
 
@@ -25,7 +35,12 @@ function AgregarPersona() {
   };
 
   const formatDate = (date) => {
-    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    const options = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
     return date.toLocaleDateString("es-ES", options);
   };
 
@@ -47,9 +62,11 @@ function AgregarPersona() {
     <div className="add-person-container">
       <h3>Agregar Persona</h3>
       <div className="form-group">
-        <label className="label" htmlFor="nombreInput">Nombre:</label>
+        <label className="label" htmlFor="nombreInput">
+          Nombre:
+        </label>
         <select
-        className="select"
+          className="select"
           id="nombreInput"
           value={nuevaPersona.nombre}
           onChange={(e) => handleInputChange(e, "nombre")}
@@ -63,10 +80,15 @@ function AgregarPersona() {
         </select>
       </div>
       <div>
-        <label className="label" htmlFor="cooperacionInput">Cooperación:</label>
-        <input className="input"
+        <label className="label" htmlFor="cooperacionInput">
+          Cooperación:
+        </label>
+        <input
+          className="input"
           id="cooperacionInput"
           type="number"
+          step="any" // Permite cualquier valor, incluyendo decimales
+          min="-5000" // Puedes ajustar este valor según tus necesidades
           value={nuevaPersona.cooperacion}
           onChange={(e) => handleInputChange(e, "cooperacion")}
         />
@@ -81,11 +103,11 @@ function AgregarPersona() {
         />
       </div>
       <p>Fecha formateada: {formatDate(new Date(nuevaPersona.fecha))}</p>
-      <button className="add-button" onClick={handleAgregarPersona}>Agregar Persona</button>
+      <button className="add-button" onClick={handleAgregarPersona}>
+        Agregar Persona
+      </button>
     </div>
   );
 }
 
 export default AgregarPersona;
-
-

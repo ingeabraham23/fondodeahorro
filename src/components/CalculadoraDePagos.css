@@ -62,6 +62,14 @@
   padding: 2px;
 }
 
+.atrasado {
+  background-color: rgb(255, 0, 0);
+  font-size: 12px;
+  text-align: center;
+  border: 1px solid #000;
+  padding: 2px;
+}
+
 .fecha-actual {
   padding: 2px;
   background-color: rgb(67, 255, 50);
