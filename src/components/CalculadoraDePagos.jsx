@@ -171,25 +171,32 @@ function CalculadoraDePagos() {
       toast.warn("Por favor, ingresa valores válidos.");
       return;
     }
-
+  
     const montoTotal = cantidadPrestamo * (1 + interes);
     const fechaPagos = [];
     let fechaActual = new Date(fechaPrimerPago);
-
+  
     for (let i = 0; i < cantidadPagos; i++) {
-      // Si la opción de incluir domingos está desactivada, omite los domingos
-      if (!incluyeDomingos && fechaActual.getDay() === 0 /* Domingo */) {
+      // Si es frecuencia semanal, establecer el día al mismo que fechaPrimerPago
+      if (frecuenciaPago === "semanal") {
+        fechaActual.setDate(fechaPrimerPago.getDate());
+      } else {
+        // Si es frecuencia diaria, simplemente avanzar al siguiente día
         fechaActual.setDate(fechaActual.getDate() + 1);
       }
-
+  
+      // Mover a la próxima semana si es frecuencia semanal
+      if (frecuenciaPago === "semanal") {
+        fechaActual.setDate(fechaActual.getDate() + i * 7);
+      }
+  
       fechaPagos.push(new Date(fechaActual));
-      fechaActual.setDate(fechaActual.getDate() + 1);
     }
-
+  
     const montoPorPago = montoTotal / cantidadPagos;
     const totalPagosRealizadosAtrasados =
       parseInt(pagosRealizados, 10) + parseInt(pagosAtrasados, 10);
-    console.log(totalPagosRealizadosAtrasados);
+  
     const calendarioPagos = fechaPagos.map((fecha, index) => ({
       fecha,
       montoPorPago,
@@ -199,11 +206,12 @@ function CalculadoraDePagos() {
           ? 0
           : index < totalPagosRealizadosAtrasados
           ? 1
-          : 2
+          : 2,
     }));
+  
     setCalendarioPagos(calendarioPagos);
-    console.log(calendarioPagos);
   };
+  
 
   const formatNumberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -471,10 +479,20 @@ function CalculadoraDePagos() {
           ))}
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
-              {index == 0 && pagosAtrasados > 0 && (
+              {index == 0 && pagosAtrasados == 1 && (
                 <td className="atrasado" colSpan={5}>
-                  Usted lleva: ({pagosAtrasados} Pagos Atrasados) 
-                  ${pagosAtrasados * pago.montoPorPago}.00
+                  Usted lleva: {pagosAtrasados} Pago Atrasado. 
+                  $ {formatNumberWithCommas(pagosAtrasados * pago.montoPorPago)}.00 Se recomienda que se ponga al corriente para no generar interés extra.
+                </td>
+              )}
+            </tr>
+          ))}
+          {calendarioPagos.map((pago, index) => (
+            <tr key={index}>
+              {index == 0 && pagosAtrasados > 1 && (
+                <td className="atrasado" colSpan={5}>
+                  Usted lleva: {pagosAtrasados} Pagos Atrasados. 
+                  $ {formatNumberWithCommas(pagosAtrasados * pago.montoPorPago)}.00 Se recomienda que se ponga al corriente para no generar interés extra.
                 </td>
               )}
             </tr>
