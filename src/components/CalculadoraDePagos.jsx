@@ -177,42 +177,35 @@ function CalculadoraDePagos() {
     let fechaActual = new Date(fechaPrimerPago);
   
     for (let i = 0; i < cantidadPagos; i++) {
-      // Si es frecuencia semanal, establecer el día al mismo que fechaPrimerPago
       if (frecuenciaPago === "semanal") {
-        fechaActual.setDate(fechaPrimerPago.getDate());
+        // Si es la primera iteración, ya tenemos el primer pago
+        if (i !== 0) {
+          // Avanzar 7 días
+          fechaActual.setDate(fechaActual.getDate() + 7);
+        }
       } else {
         // Si es frecuencia diaria, simplemente avanzar al siguiente día
+        if (i !== 0) {
         fechaActual.setDate(fechaActual.getDate() + 1);
       }
-  
-      // Mover a la próxima semana si es frecuencia semanal
-      if (frecuenciaPago === "semanal") {
-        fechaActual.setDate(fechaActual.getDate() + i * 7);
       }
   
       fechaPagos.push(new Date(fechaActual));
     }
   
     const montoPorPago = montoTotal / cantidadPagos;
-    const totalPagosRealizadosAtrasados =
-      parseInt(pagosRealizados, 10) + parseInt(pagosAtrasados, 10);
+    const totalPagosRealizadosAtrasados = parseInt(pagosRealizados, 10) + parseInt(pagosAtrasados, 10);
   
     const calendarioPagos = fechaPagos.map((fecha, index) => ({
       fecha,
       montoPorPago,
       montoPorPagar: montoTotal - index * montoPorPago - montoPorPago,
-      estado:
-        index < pagosRealizados
-          ? 0
-          : index < totalPagosRealizadosAtrasados
-          ? 1
-          : 2,
+      estado: index < pagosRealizados ? 0 : index < totalPagosRealizadosAtrasados ? 1 : 2,
     }));
   
     setCalendarioPagos(calendarioPagos);
   };
   
-
   const formatNumberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
