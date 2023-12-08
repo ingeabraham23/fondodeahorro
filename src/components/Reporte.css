@@ -13,7 +13,7 @@
     background-color: #f0f0f0;
     padding: 3px;
     text-align: center;
-    font-size: 8px; /* Tamaño de fuente personalizado para los encabezados */
+    font-size: 15px; /* Tamaño de fuente personalizado para los encabezados */
   }
   
   /* Estilos para las celdas de datos (td) */
@@ -33,13 +33,11 @@
     .tabla-reporte {
       font-size: 12px; /* Reduce el tamaño del texto */
     }
-    
-  /* Ajustar el ancho de los inputs en pantallas más grandes */
-  @media screen and (min-width: 768px) {
-    .filtro-container input {
-      width: 33%; /* Dividir el espacio en tres partes iguales para que los inputs ocupen una tercera parte del contenedor */
+
+    .contenedor-botones-flotantes{
+      display: flex;
+      justify-content: space-evenly;
     }
-  }
   
     .tabla-reporte th,
     .tabla-reporte td {
@@ -115,7 +113,7 @@
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    border-radius: 20%;
+    border-radius: 5px;
     font-size: 20px; /* Aumenta el tamaño de letra */
     /* Agrega otros estilos específicos para este botón */
   }
@@ -149,13 +147,6 @@
     font-size: 12px; /* Reduce el tamaño del texto */
   }
 
-  /* Ajustar el ancho de los inputs en pantallas más grandes */
-  @media screen and (min-width: 768px) {
-    .filtro-container input {
-      width: 33%; /* Dividir el espacio en tres partes iguales para que los inputs ocupen una tercera parte del contenedor */
-    }
-  }
-
   .tabla-reporte th,
   .tabla-reporte td {
     padding: 2px; /* Reduce el relleno de las celdas */
@@ -163,5 +154,14 @@
 
   .tabla-container {
     overflow-x: auto; /* Agrega una barra de desplazamiento horizontal en pantallas pequeñas */
+  }
+
+  .titulo-fecha{
+    font-size: 20px;
+  }
+
+  .contenedor-botones-flotantes{
+    position: fixed;
+    top: 55px;
   }
 }

@@ -11,12 +11,14 @@ import {
   faCamera,
   faCircleArrowDown,
   faFilePdf,
+  faCircleArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function TablaReporte() {
   const [reportes, setReportes] = useState([]);
   const [filtroNombre, setFiltroNombre] = useState("");
+  const [filtroEspecial, setFiltroEspecial] = useState(false);
 
   const tableRef = useRef(null);
 
@@ -38,8 +40,29 @@ function TablaReporte() {
     setFiltroNombre(e.target.value);
   };
 
+  const handleToggleFiltroEspecial = () => {
+    setFiltroEspecial(!filtroEspecial);
+  };
+
   // Función para filtrar los datos por número de unidad y ruta
   const filtrarDatos = (reportes) => {
+
+    if (filtroEspecial) {
+      const nombresUnicos = Array.from(new Set(reportes.map((reporte) => reporte.nombre)));
+      const reportesFiltradosEspeciales = nombresUnicos.map((nombre) => {
+        const aportesTotales = reportes
+          .filter((reporte) => reporte.nombre === nombre)
+          .reduce((total, reporte) => total + reporte.cooperacion, 0);
+        return {
+          nombre: nombre,
+          cooperacion: aportesTotales,
+          fecha: "",
+        };
+      });
+
+      return reportesFiltradosEspeciales;
+    }
+
     return reportes
       .filter((reporte) => {
         const nombreLowerCase = reporte.nombre.toLowerCase(); // Convertir el nombre a minúsculas
@@ -221,13 +244,44 @@ function TablaReporte() {
     window.scrollTo(0, document.body.scrollHeight);
   };
 
+  const handleGoToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const totalCooperacion = reportesFiltrados.reduce(
     (total, reporte) => total + reporte.cooperacion,
     0
   );
 
+  const formatNumberWithCommas = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const formatDate = (date) => {
+    const options = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+    return date.toLocaleDateString("es-ES", options);
+  };
+
   return (
     <div>
+      
+      <div className="contenedor-botones-flotantes">
+        <button className="boton-ir-abajo" onClick={handleGoToBottom}>
+          <FontAwesomeIcon icon={faCircleArrowDown} />
+        </button>
+        <button className="boton-ir-abajo" onClick={handleGoToTop}>
+        <FontAwesomeIcon icon={faCircleArrowUp} />
+      </button>
+        <button className="boton-ir-abajo" onClick={handleToggleFiltroEspecial}>
+          {filtroEspecial ? "Mostrar Todos" : "Resumir"}
+        </button>
+      </div>
+      <br /><br /><br /><br />
       <div className="filtros">
         <input
           type="text"
@@ -238,17 +292,15 @@ function TablaReporte() {
           inputMode="text" /* Teclado numérico */
         />
       </div>
-      <div>
-        <button className="boton-ir-abajo" onClick={handleGoToBottom}>
-          <FontAwesomeIcon icon={faCircleArrowDown} />
-        </button>
-      </div>
       <table ref={tableRef} className="tabla-reporte">
         <thead>
           <tr>
+            <th colSpan={4} className="titulo-fecha" >{formatDate(new Date())}</th>
+          </tr>
+          <tr>
             <th>#</th>
             <th>Nombre</th>
-            <th>Cooperacion</th>
+            <th>Aporte</th>
             <th>Fecha</th>
           </tr>
         </thead>
@@ -257,7 +309,7 @@ function TablaReporte() {
             <tr key={reporte.id} style={{ backgroundColor: reporte.color }}>
               <td style={{ backgroundColor: "#00ECFF" }}>{index + 1}</td>
               <td>{reporte.nombre}</td>
-              <td>{reporte.cooperacion}</td>
+              <td>$ {formatNumberWithCommas(reporte.cooperacion.toFixed(2))}</td>
               <td>{reporte.fecha}</td>
             </tr>
           ))}
@@ -266,12 +318,13 @@ function TablaReporte() {
           <tr>
             <td></td>
             <td className="total-label">Total:</td>
-            <td className="total-value">{totalCooperacion}</td>
+            <td className="total-value">$ {formatNumberWithCommas(totalCooperacion.toFixed(2))}</td>
             <td></td>
           </tr>
         </tfoot>
       </table>
       <div>
+      
         <button className="boton-pdf" onClick={handleDownloadPDF}>
           <FontAwesomeIcon icon={faFilePdf} />
         </button>

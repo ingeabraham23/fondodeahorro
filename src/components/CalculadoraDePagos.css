@@ -168,3 +168,10 @@ select {
   width: 100%;
   padding: 5px 10px;
 }
+
+.index{
+  width: 15px;
+  text-align: center;
+  border: 1px solid black;
+  font-size: 10px;
+}

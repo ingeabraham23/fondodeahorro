@@ -358,7 +358,7 @@ function CalculadoraDePagos() {
             <td className="titulo" colSpan={2}>
               Cliente:
             </td>
-            <td className="titulo-valor" colSpan={3}>
+            <td className="titulo-valor" colSpan={4}>
               {nombre}
             </td>
           </tr>
@@ -366,7 +366,7 @@ function CalculadoraDePagos() {
             <td className="titulo" colSpan={2}>
               Prestamo:
             </td>
-            <td className="titulo-valor" colSpan={3}>
+            <td className="titulo-valor" colSpan={4}>
               $ {formatNumberWithCommas(cantidadPrestamo)}.00
             </td>
           </tr>
@@ -374,7 +374,7 @@ function CalculadoraDePagos() {
             <td className="titulo" colSpan={2}>
               Interés:
             </td>
-            <td className="titulo-valor" colSpan={3}>
+            <td className="titulo-valor" colSpan={4}>
               {interes * 100}%
             </td>
           </tr>
@@ -384,7 +384,7 @@ function CalculadoraDePagos() {
             </td>
             <td
               className="titulo-valor"
-              colSpan={3}
+              colSpan={4}
               style={{ textAlign: "center" }}
             >
               $ {formatNumberWithCommas(cantidadPrestamo * (1 + interes))}.00{" "}
@@ -399,7 +399,7 @@ function CalculadoraDePagos() {
             <td className="titulo" colSpan={2}>
               Fecha del prestamo:
             </td>
-            <td colSpan={3} className="titulo-valor">
+            <td colSpan={4} className="titulo-valor">
               {fechaPrestamo
                 ? format(fechaPrestamo, "EEEE d 'de' MMMM 'de' y", {
                     locale: es,
@@ -408,6 +408,7 @@ function CalculadoraDePagos() {
             </td>
           </tr>
           <tr className="cabecera">
+            <th></th>
             <th colSpan={2}>Fecha</th>
             <th>Pago</th>
             <th>Resta</th>
@@ -417,6 +418,7 @@ function CalculadoraDePagos() {
         <tbody>
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
+            <td className="index">{index + 1}</td>
               <td colSpan={2} className="fechapago" style={{backgroundColor:pago.estado == 1 ? "red": "#ff9232"}}>
                 {format(pago.fecha, "EE d 'de' MMM 'de' y", { locale: es })}
               </td>
@@ -439,14 +441,14 @@ function CalculadoraDePagos() {
           ))}
 
           <tr>
-            <td colSpan={5} className="fecha-actual">
+            <td colSpan={6} className="fecha-actual">
               {fechaFormateada}
             </td>
           </tr>
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
               {index == pagosRealizados - 1 && (
-                <td className="ha-pagado" colSpan={5}>
+                <td className="ha-pagado" colSpan={6}>
                   Usted ha pagado: ${" "}
                   {formatNumberWithCommas(
                     cantidadPrestamo * (1 + interes) - pago.montoPorPagar
@@ -461,7 +463,7 @@ function CalculadoraDePagos() {
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
               {index == pagosRealizados - 1 && (
-                <td className="debe-hoy" colSpan={5}>
+                <td className="debe-hoy" colSpan={6}>
                   Usted debe hoy: $ {formatNumberWithCommas(pago.montoPorPagar)}
                   .00{" ("}
                   {cantidadPagos - pagosRealizados}
@@ -473,7 +475,7 @@ function CalculadoraDePagos() {
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
               {index == 0 && pagosAtrasados == 1 && (
-                <td className="atrasado" colSpan={5}>
+                <td className="atrasado" colSpan={6}>
                   Usted lleva: {pagosAtrasados} Pago Atrasado. 
                   $ {formatNumberWithCommas(pagosAtrasados * pago.montoPorPago)}.00 Se recomienda que se ponga al corriente para no generar interés extra.
                 </td>
@@ -483,7 +485,7 @@ function CalculadoraDePagos() {
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
               {index == 0 && pagosAtrasados > 1 && (
-                <td className="atrasado" colSpan={5}>
+                <td className="atrasado" colSpan={6}>
                   Usted lleva: {pagosAtrasados} Pagos Atrasados. 
                   $ {formatNumberWithCommas(pagosAtrasados * pago.montoPorPago)}.00 Se recomienda que se ponga al corriente para no generar interés extra.
                 </td>
