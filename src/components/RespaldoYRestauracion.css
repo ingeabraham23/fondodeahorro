@@ -45,6 +45,15 @@
     cursor: pointer;
     transition: background-color 0.3s;
   }
+
+  .button-delete{
+    padding: 10px 20px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff0000;
+    color: #fff;
+  }
   
   .button.backup {
     background-color: #3498db;
