@@ -12,7 +12,7 @@ registerLocale('es', es);
 
 function Calendario() {
   const fechaActual = new Date(); // Obtiene la fecha actual
-  const diaCero = new Date(2023, 6, 8); // 8 de julio de 2023
+  const diaCero = new Date(2023, 10, 25); // 25 de noviembre de 2023
 
   // Calcula las fechas y ahorros desde diaCero hasta la fecha límite
   const calcularFechasYAhorros = (fechaInicio, fechaLimite) => {
