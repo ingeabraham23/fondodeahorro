@@ -30,6 +30,7 @@ function CalculadoraDePagos() {
   const [incluyeDomingos, setIncluyeDomingos] = useState(true);
 
   const tablaPagosRef = useRef(null);
+  const tablaClientesRef = useRef(null);
   // Obtén la fecha actual
   const fechaActual = new Date();
 
@@ -167,15 +168,15 @@ function CalculadoraDePagos() {
 
   // Función para calcular los pagos y generar el calendario de pagos
   const calcularPagos = () => {
-    if (cantidadPrestamo <= 0 || interes <= 0 || cantidadPagos <= 0) {
+    if (cantidadPrestamo <= 0 || interes < 0 || cantidadPagos <= 0) {
       toast.warn("Por favor, ingresa valores válidos.");
       return;
     }
-  
+
     const montoTotal = cantidadPrestamo * (1 + interes);
     const fechaPagos = [];
     let fechaActual = new Date(fechaPrimerPago);
-  
+
     for (let i = 0; i < cantidadPagos; i++) {
       if (frecuenciaPago === "semanal") {
         // Si es la primera iteración, ya tenemos el primer pago
@@ -186,26 +187,32 @@ function CalculadoraDePagos() {
       } else {
         // Si es frecuencia diaria, simplemente avanzar al siguiente día
         if (i !== 0) {
-        fechaActual.setDate(fechaActual.getDate() + 1);
+          fechaActual.setDate(fechaActual.getDate() + 1);
+        }
       }
-      }
-  
+
       fechaPagos.push(new Date(fechaActual));
     }
-  
+
     const montoPorPago = montoTotal / cantidadPagos;
-    const totalPagosRealizadosAtrasados = parseInt(pagosRealizados, 10) + parseInt(pagosAtrasados, 10);
-  
+    const totalPagosRealizadosAtrasados =
+      parseInt(pagosRealizados, 10) + parseInt(pagosAtrasados, 10);
+
     const calendarioPagos = fechaPagos.map((fecha, index) => ({
       fecha,
       montoPorPago,
       montoPorPagar: montoTotal - index * montoPorPago - montoPorPago,
-      estado: index < pagosRealizados ? 0 : index < totalPagosRealizadosAtrasados ? 1 : 2,
+      estado:
+        index < pagosRealizados
+          ? 0
+          : index < totalPagosRealizadosAtrasados
+          ? 1
+          : 2,
     }));
-  
+
     setCalendarioPagos(calendarioPagos);
   };
-  
+
   const formatNumberWithCommas = (number) => {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
@@ -220,7 +227,19 @@ function CalculadoraDePagos() {
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
-      toast.success("La tabla se ha capturado correctamente.");
+    });
+  }
+
+  function capturarTablaClientes() {
+    const tabla = tablaClientesRef.current;
+    html2canvas(tabla).then(function (canvas) {
+      const pngUrl = canvas.toDataURL("image/png");
+      const downloadLink = document.createElement("a");
+      downloadLink.href = pngUrl;
+      downloadLink.download = "clientes.png";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
     });
   }
 
@@ -418,24 +437,47 @@ function CalculadoraDePagos() {
         <tbody>
           {calendarioPagos.map((pago, index) => (
             <tr key={index}>
-            <td className="index">{index + 1}</td>
-              <td colSpan={2} className="fechapago" style={{backgroundColor:pago.estado == 1 ? "red": "#ff9232"}}>
+              <td className="index">{index + 1}</td>
+              <td
+                colSpan={2}
+                className="fechapago"
+                style={{
+                  backgroundColor: pago.estado == 1 ? "red" : "#ff9232",
+                }}
+              >
                 {format(pago.fecha, "EE d 'de' MMM 'de' y", { locale: es })}
               </td>
-              <td className="montopago" style={{backgroundColor:pago.estado == 1 ? "red": "#ffbb6d"}}>
+              <td
+                className="montopago"
+                style={{
+                  backgroundColor: pago.estado == 1 ? "red" : "#ffbb6d",
+                }}
+              >
                 {pago.omitido
                   ? "-"
                   : `$ ${formatNumberWithCommas(pago.montoPorPago)}.00`}
               </td>
-              <td className="resta" style={{backgroundColor:pago.estado == 1 ? "red": "#ff9232"}}>
+              <td
+                className="resta"
+                style={{
+                  backgroundColor: pago.estado == 1 ? "red" : "#ff9232",
+                }}
+              >
                 {pago.omitido
                   ? "-"
                   : `$ ${formatNumberWithCommas(pago.montoPorPagar)}.00`}
               </td>
               <td
-              className="resta" style={{backgroundColor:pago.estado == 1 ? "red": "#ff9232"}}
+                className="resta"
+                style={{
+                  backgroundColor: pago.estado == 1 ? "red" : "#ff9232",
+                }}
               >
-                {pago.estado == 0 ? "👍 Pagado." : pago.estado == 1 ? "❎ Atrasado." : "⏰ Pendiente."}
+                {pago.estado == 0
+                  ? "👍 Pagado."
+                  : pago.estado == 1
+                  ? "❎ Atrasado."
+                  : "⏰ Pendiente."}
               </td>
             </tr>
           ))}
@@ -476,8 +518,10 @@ function CalculadoraDePagos() {
             <tr key={index}>
               {index == 0 && pagosAtrasados == 1 && (
                 <td className="atrasado" colSpan={6}>
-                  Usted lleva: {pagosAtrasados} Pago Atrasado. 
-                  $ {formatNumberWithCommas(pagosAtrasados * pago.montoPorPago)}.00 Se recomienda que se ponga al corriente para no generar interés extra.
+                  Usted lleva: {pagosAtrasados} Pago Atrasado. ${" "}
+                  {formatNumberWithCommas(pagosAtrasados * pago.montoPorPago)}
+                  .00 Se recomienda que se ponga al corriente para no generar
+                  interés extra.
                 </td>
               )}
             </tr>
@@ -486,8 +530,10 @@ function CalculadoraDePagos() {
             <tr key={index}>
               {index == 0 && pagosAtrasados > 1 && (
                 <td className="atrasado" colSpan={6}>
-                  Usted lleva: {pagosAtrasados} Pagos Atrasados. 
-                  $ {formatNumberWithCommas(pagosAtrasados * pago.montoPorPago)}.00 Se recomienda que se ponga al corriente para no generar interés extra.
+                  Usted lleva: {pagosAtrasados} Pagos Atrasados. ${" "}
+                  {formatNumberWithCommas(pagosAtrasados * pago.montoPorPago)}
+                  .00 Se recomienda que se ponga al corriente para no generar
+                  interés extra.
                 </td>
               )}
             </tr>
@@ -507,6 +553,98 @@ function CalculadoraDePagos() {
       </div>
       <div className="contenedor-boton">
         <button onClick={capturarTabla} className="boton-capturar">
+          Capturar <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
+        </button>
+      </div>
+
+      <div>
+        <table className="tabla-clientes" ref={tablaClientesRef}>
+          <thead>
+            <tr>
+              <th className="titulo-clientes" colSpan={6}>
+                Clientes
+              </th>
+            </tr>
+            <tr>
+              <th className="encabezado-clientes"></th>
+              <th className="encabezado-clientes">Nombre</th>
+              <th className="encabezado-clientes">Cantidad</th>
+              <th className="encabezado-clientes">#</th>
+              <th className="encabezado-clientes">Inicio</th>
+              <th className="encabezado-clientes">Final</th>
+            </tr>
+          </thead>
+          <tbody>
+            {registros.map((registro, index) => (
+              <tr key={registro.id}>
+                <td className="datos-clientes-pagos">{index + 1}</td>
+                <td className="datos-clientes-nombre">{registro.nombre}</td>
+                <td className="datos-clientes-cantidad">
+                  $ {registro.cantidadPrestamo}
+                </td>
+                <td className="datos-clientes-pagos">
+                  {registro.cantidadPagos}
+                </td>
+                <td className="datos-clientes-inicio">
+                  {registro.fechaPrestamo
+                    ? format(registro.fechaPrestamo, "EEE dd MMM", {
+                        locale: es,
+                      })
+                    : "Fecha no seleccionada"}
+                </td>
+                <td
+                  className="datos-clientes-final"
+                  style={{
+                    backgroundColor:
+                      new Date(
+                        registro.calendarioPagos[
+                          registro.calendarioPagos.length - 1
+                        ].fecha
+                      ) < new Date()
+                        ? "red"
+                        : "#A6FF00",
+                  }}
+                >
+                  {registro.calendarioPagos.length > 0
+                    ? format(
+                        registro.calendarioPagos[
+                          registro.calendarioPagos.length - 1
+                        ].fecha,
+                        "EEE dd MMM",
+                        { locale: es }
+                      )
+                    : "-"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td
+                className="datos-clientes-pie"
+                colSpan={3}
+                style={{ textAlign: "right" }}
+              >
+                Total:
+              </td>
+              <td className="datos-clientes-pie" colSpan={3}>
+                $
+                {formatNumberWithCommas(
+                  registros
+                    .reduce(
+                      (total, registro) =>
+                        total + parseFloat(registro.cantidadPrestamo),
+                      0
+                    )
+                    .toFixed(2)
+                )}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div className="contenedor-boton">
+        <button onClick={capturarTablaClientes} className="boton-capturar">
           Capturar <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
         </button>
       </div>

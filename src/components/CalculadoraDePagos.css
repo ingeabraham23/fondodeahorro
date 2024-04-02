@@ -4,6 +4,12 @@
   width: 100%;
 }
 
+.tabla-clientes {
+  border: 1px solid #000;
+  border-collapse: collapse;
+  width: 100%;
+}
+
 .titulo {
   background-color: #cc3e02;
   font-size: 12px;
@@ -174,4 +180,68 @@ select {
   text-align: center;
   border: 1px solid black;
   font-size: 10px;
+}
+
+.titulo-clientes {
+  background-color: #cc3e02;
+  font-size: 22px;
+  padding: 2px;
+  color: #ffffff;
+  border: 1px solid #000;
+}
+
+.encabezado-clientes {
+  background-color: #646464;
+  font-size: 16px;
+  padding: 2px;
+  color: #ffffff;
+  border: 1px solid #000;
+}
+
+.datos-clientes-nombre {
+  background-color: #73ff00;
+  font-size: 16px;
+  padding: 2px;
+  color: #000000;
+  border: 1px solid #000;
+}
+
+.datos-clientes-cantidad {
+  background-color: #e8f800;
+  font-size: 16px;
+  padding: 2px;
+  color: #000000;
+  border: 1px solid #000;
+}
+
+.datos-clientes-pagos {
+  background-color: #ffffff;
+  font-size: 16px;
+  padding: 2px;
+  color: #000000;
+  border: 1px solid #000;
+}
+
+.datos-clientes-inicio {
+  background-color: #57a5e6;
+  font-size: 16px;
+  padding: 2px;
+  color: #000000;
+  border: 1px solid #000;
+}
+
+.datos-clientes-final {
+  background-color: #ad7cec;
+  font-size: 16px;
+  padding: 2px;
+  color: #000000;
+  border: 1px solid #000;
+}
+
+.datos-clientes-pie {
+  background-color: #838383;
+  font-size: 22px;
+  padding: 2px;
+  color: #000000;
+  border: 1px solid #000;
 }
