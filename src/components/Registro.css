@@ -76,4 +76,37 @@
     color: #e74c3c;
     font-weight: bold;
   }
+
+  .input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sign-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.sign-button.positivo {
+  background-color: #28a745; /* verde */
+}
+
+.sign-button.positivo:hover {
+  background-color: #218838;
+}
+
+.sign-button.negativo {
+  background-color: #dc3545; /* rojo */
+}
+
+.sign-button.negativo:hover {
+  background-color: #c82333;
+}
+
   
