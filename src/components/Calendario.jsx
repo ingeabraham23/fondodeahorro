@@ -12,20 +12,20 @@ registerLocale('es', es);
 
 function Calendario() {
   const fechaActual = new Date(); // Obtiene la fecha actual
-  const diaCero = new Date(2023, 10, 25); // 25 de noviembre de 2023
+  const diaCero = new Date(2026, 2, 3); // 03 de enero de 2026
 
   // Calcula las fechas y ahorros desde diaCero hasta la fecha límite
   const calcularFechasYAhorros = (fechaInicio, fechaLimite) => {
     const fechasYAhorros = [];
     const diasParaAgregar = 7;
     let fechaActual = new Date(fechaInicio);
-    let ahorro = 100;
+    let ahorro = 200;
     let grupal;
 
     while (fechaActual <= fechaLimite) {
       fechasYAhorros.push({ fecha: fechaActual.toDateString(), ahorro });
       fechaActual.setDate(fechaActual.getDate() + diasParaAgregar);
-      ahorro += 100; // Ejemplo de incremento del ahorro cada 8 días
+      ahorro += 200; // Ejemplo de incremento del ahorro cada 8 días
     }
 
     grupal = ahorro * 7;

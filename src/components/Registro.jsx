@@ -6,13 +6,14 @@ import db from "../db";
 import "./Registro.css";
 
 const nombresDisponibles = [
+  "Avril",
+  "Kathia",
   "Abraham",
   "David",
   "Eloy",
-  "Enrique",
   "Heriberto",
   "Lobo",
-  "Marco",
+  "Ferxxo",
 ];
 
 function AgregarPersona() {
