@@ -12,7 +12,7 @@ registerLocale('es', es);
 
 function Calendario() {
   const fechaActual = new Date(); // Obtiene la fecha actual
-  const diaCero = new Date(2026, 2, 3); // 03 de enero de 2026
+  const diaCero = new Date(2026, 0, 4); // 03 de enero de 2026
 
   // Calcula las fechas y ahorros desde diaCero hasta la fecha límite
   const calcularFechasYAhorros = (fechaInicio, fechaLimite) => {
