@@ -206,8 +206,8 @@ function CalculadoraDePagos() {
         index < pagosRealizados
           ? 0
           : index < totalPagosRealizadosAtrasados
-          ? 1
-          : 2,
+            ? 1
+            : 2,
     }));
 
     setCalendarioPagos(calendarioPagos);
@@ -219,7 +219,7 @@ function CalculadoraDePagos() {
 
   function capturarTabla() {
     const tabla = tablaPagosRef.current;
-    html2canvas(tabla).then(function (canvas) {
+    html2canvas(tabla, { scale: 6 }).then(function (canvas) {
       const pngUrl = canvas.toDataURL("image/png");
       const downloadLink = document.createElement("a");
       downloadLink.href = pngUrl;
@@ -232,7 +232,7 @@ function CalculadoraDePagos() {
 
   function capturarTablaClientes() {
     const tabla = tablaClientesRef.current;
-    html2canvas(tabla).then(function (canvas) {
+    html2canvas(tabla, {scale: 6}).then(function (canvas) {
       const pngUrl = canvas.toDataURL("image/png");
       const downloadLink = document.createElement("a");
       downloadLink.href = pngUrl;
@@ -242,6 +242,12 @@ function CalculadoraDePagos() {
       document.body.removeChild(downloadLink);
     });
   }
+
+  const coloresEstado = {
+    0: "#00d407", // verde
+    1: "#ff1100", // rojo
+    2: "#ffffff", // naranja
+  };
 
   return (
     <div>
@@ -407,7 +413,7 @@ function CalculadoraDePagos() {
               style={{ textAlign: "center" }}
             >
               $ {formatNumberWithCommas(cantidadPrestamo * (1 + interes))}.00{" "}
-              <hr></hr>En {cantidadPagos} Pagos de ${" "}
+              <br></br>〰〰〰〰〰〰〰〰〰〰〰〰〰〰〰<br></br>En {cantidadPagos} Pagos de ${" "}
               {formatNumberWithCommas(
                 (cantidadPrestamo * (1 + interes)) / cantidadPagos
               )}
@@ -421,8 +427,8 @@ function CalculadoraDePagos() {
             <td colSpan={4} className="titulo-valor">
               {fechaPrestamo
                 ? format(fechaPrestamo, "EEEE d 'de' MMMM 'de' y", {
-                    locale: es,
-                  })
+                  locale: es,
+                })
                 : "Fecha no seleccionada"}
             </td>
           </tr>
@@ -442,7 +448,7 @@ function CalculadoraDePagos() {
                 colSpan={2}
                 className="fechapago"
                 style={{
-                  backgroundColor: pago.estado == 1 ? "red" : "#ff9232",
+                  backgroundColor: coloresEstado[pago.estado] || "#ccc",
                 }}
               >
                 {format(pago.fecha, "EE d 'de' MMM 'de' y", { locale: es })}
@@ -450,7 +456,7 @@ function CalculadoraDePagos() {
               <td
                 className="montopago"
                 style={{
-                  backgroundColor: pago.estado == 1 ? "red" : "#ffbb6d",
+                  backgroundColor: coloresEstado[pago.estado] || "#ccc",
                 }}
               >
                 {pago.omitido
@@ -460,7 +466,7 @@ function CalculadoraDePagos() {
               <td
                 className="resta"
                 style={{
-                  backgroundColor: pago.estado == 1 ? "red" : "#ff9232",
+                  backgroundColor: coloresEstado[pago.estado] || "#ccc",
                 }}
               >
                 {pago.omitido
@@ -470,14 +476,14 @@ function CalculadoraDePagos() {
               <td
                 className="resta"
                 style={{
-                  backgroundColor: pago.estado == 1 ? "red" : "#ff9232",
+                  backgroundColor: coloresEstado[pago.estado] || "#ccc",
                 }}
               >
                 {pago.estado == 0
                   ? "👍 Pagado."
                   : pago.estado == 1
-                  ? "❎ Atrasado."
-                  : "⏰ Pendiente."}
+                    ? "❎ Atrasado."
+                    : "⏰ Pendiente."}
               </td>
             </tr>
           ))}
@@ -588,8 +594,8 @@ function CalculadoraDePagos() {
                 <td className="datos-clientes-inicio">
                   {registro.fechaPrestamo
                     ? format(registro.fechaPrestamo, "EEE dd MMM", {
-                        locale: es,
-                      })
+                      locale: es,
+                    })
                     : "Fecha no seleccionada"}
                 </td>
                 <td
@@ -607,12 +613,12 @@ function CalculadoraDePagos() {
                 >
                   {registro.calendarioPagos.length > 0
                     ? format(
-                        registro.calendarioPagos[
-                          registro.calendarioPagos.length - 1
-                        ].fecha,
-                        "EEE dd MMM",
-                        { locale: es }
-                      )
+                      registro.calendarioPagos[
+                        registro.calendarioPagos.length - 1
+                      ].fecha,
+                      "EEE dd MMM",
+                      { locale: es }
+                    )
                     : "-"}
                 </td>
               </tr>

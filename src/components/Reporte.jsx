@@ -231,7 +231,7 @@ function TablaReporte() {
     // Guardar el IMAGEN con el nombre de archivo formateado
     const filename = `${formattedDate}`;
 
-    html2canvas(input).then((canvas) => {
+    html2canvas(input, { scale: 6 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const link = document.createElement("a");
       link.download = filename + ".png";
@@ -269,14 +269,14 @@ function TablaReporte() {
 
   return (
     <div>
-      
+
       <div className="contenedor-botones-flotantes">
         <button className="boton-ir-abajo" onClick={handleGoToBottom}>
           <FontAwesomeIcon icon={faCircleArrowDown} />
         </button>
         <button className="boton-ir-abajo" onClick={handleGoToTop}>
-        <FontAwesomeIcon icon={faCircleArrowUp} />
-      </button>
+          <FontAwesomeIcon icon={faCircleArrowUp} />
+        </button>
         <button className="boton-ir-abajo" onClick={handleToggleFiltroEspecial}>
           {filtroEspecial ? "Mostrar Todos" : "Resumir"}
         </button>
@@ -324,7 +324,7 @@ function TablaReporte() {
         </tfoot>
       </table>
       <div>
-      
+
         <button className="boton-pdf" onClick={handleDownloadPDF}>
           <FontAwesomeIcon icon={faFilePdf} />
         </button>
